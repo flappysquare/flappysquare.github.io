@@ -12,7 +12,13 @@ canvas {
 <body>
     <button onclick="startGame(); this.style.display = 'none';">START</button>
 <script>
-
+if (localStorage.getItem("highscore") !== null) {
+	document.write("Your highscore is " + localStorage.getItem("highscore"));
+}
+else {
+	document.write("Play the game to set a highscore");
+    localStorage.setItem("highscore", 0);
+}
 var myGamePiece;
 var myObstacles = [];
 var myScore;
@@ -90,11 +96,12 @@ function component(width, height, color, x, y, type) {
         return crash;
     }
 }
-
+var testhighscore = true;
 function updateGameArea() {
     var x, height, gap, minHeight, maxHeight, minGap, maxGap;
     for (i = 0; i < myObstacles.length; i += 1) {
         if (myGamePiece.crashWith(myObstacles[i])) {
+            updatehighscore();
             return;
         } 
     }
@@ -125,7 +132,12 @@ function everyinterval(n) {
     if ((myGameArea.frameNo / n) % 1 == 0) {return true;}
     return false;
 }
-
+function updatehighscore() {
+if (testhighscore && localStorage.getItem("highscore") < myGameArea.frameNo) {
+	localStorage.setItem("highscore", myGameArea.frameNo);
+	document.write("Your highscore is now " +  localStorage.getItem("highscore"));
+}
+}
 function accelerate(n) {
     myGamePiece.gravity = n;
 }
